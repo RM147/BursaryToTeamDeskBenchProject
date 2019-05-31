@@ -23,6 +23,8 @@ var transporter = nodemailer.createTransport({
 
 var loopCount = 0;
 
+var PriorSingleRecord = "PriorTestTest";
+var priorRecordID = "PriorTest"
 var SingleRecord = "TestRecord";
 var recordID = "Test";
 var recordName = "Test";
@@ -113,25 +115,25 @@ function myFunction() {
 							else if (JSON.stringify(databaseinfo[i]) != JSON.stringify(result[i])) {
 								console.log("Record " + i + " Are Not The Same")
 
-								console.log(result[i]);
+								//console.log(result[i]);
 								SingleRecord = JSON.stringify(result[i]);
-								console.log("ID");
-								console.log(SingleRecord);
+								//console.log("ID");
+								//console.log(SingleRecord);
 								SingleRecord = SingleRecord.replace("{", "");
 								SingleRecord = SingleRecord.replace("}", "");
-								console.log(SingleRecord);
+								//console.log(SingleRecord);
 								SingleRecord = SingleRecord.replace(/"/g, "");
-								console.log(SingleRecord);
+								//console.log(SingleRecord);
 								var words = SingleRecord.split(',');
-								console.log(words[0]);
+								//console.log(words[0]);
 								var wordsID = words[0].split(':')
-								console.log(wordsID);
+								//console.log(wordsID);
 								recordID = wordsID[1];
 								var wordsName = words[1].split(':')
-								console.log(wordsName);
+								//console.log(wordsName);
 								recordName = wordsName[1];
 								var wordsAdress = words[2].split(':')
-								console.log(wordsAdress);
+								//console.log(wordsAdress);
 								recordAdress = wordsAdress[1];
 
 
@@ -149,10 +151,30 @@ function myFunction() {
 									RemoveRecordsFromTeamDesk();
 								}
 								else {
+
+									PriorSingleRecord = JSON.stringify(databaseinfo[i]);
+									console.log("OLD RECORD");
+									console.log(PriorSingleRecord);
+									PriorSingleRecord = PriorSingleRecord.replace("{", "");
+									PriorSingleRecord = PriorSingleRecord.replace("}", "");
+									console.log(PriorSingleRecord);
+									PriorSingleRecord = PriorSingleRecord.replace(/"/g, "");
+									console.log(PriorSingleRecord);
+									var Priorwords = PriorSingleRecord.split(',');
+									console.log(Priorwords [0]);
+									var priorwordsID = Priorwords[0].split(':')
+									console.log(priorwordsID);
+									priorRecordID = priorwordsID[1];
+
+									console.log("OLD ID");
+									console.log(priorwordsID);
+									console.log("New ID");
+									console.log(wordsID);
 									console.log("The Record Was Changed");
 									changedRecordsRowNumber.push(i);
 									changedRecords.push(result[i]);
 									UpdateRecordsToTeamDesk();
+
 								}
 
 								console.log("Record Change From ")
@@ -165,7 +187,6 @@ function myFunction() {
 						console.log("Changed Rows " + changedRecords);
 						console.log("Added Rows " + addedRecords);
 						console.log("Removed Rows " + deletedRecords);
-						databaseinfo = result;
 						sendCompleteEmail()
 					}
 					deletedRecords = [];
@@ -173,6 +194,7 @@ function myFunction() {
 					changedRecords = [];
 					changedRecordsRowNumber = []
 					loopCount = 0;
+					databaseinfo = result;
 					db.close();
 				}
 			})
@@ -225,13 +247,10 @@ function sendCompleteEmail() {
 }
 
 function AddRecordsToTeamDesk() {
-
 	axios.post("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "/Account/create.json",
 		{
-			//"@row.id": 9,
 			"Id": "" + recordID,
 			"Record Owner": "Jim Button <balloonjimballoon@gmail.com>",
-
 			"_id": "" + recordID,
 			"name": "" + recordName,
 			"address": "" + recordAdress
@@ -241,28 +260,35 @@ function AddRecordsToTeamDesk() {
 }
 
 function UpdateRecordsToTeamDesk() {
-		axios.post("https://www.teamdesk.net/secure/api/v2/66139/"
-		+authtoken
-		+"/Account/update.json",
+	
+	axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
+		+ authtoken
+		+ "/Account/delete.json?match=_id&key="
+		+ priorRecordID)
+		.then(res => { let result5 = res.data; console.log(result5); })
+	console.log("Removed Record At Id " + i)
+	
+	axios.post("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "/Account/create.json",
 		{
-			"Id": recordID,
+			"Id": "" + recordID,
 			"Record Owner": "Jim Button <balloonjimballoon@gmail.com>",
-			"_id": recordID,
-			"name": recordName,
-		  }
-		).then( res => {let result5 = res.data;console.log(result5);})
-			.catch( (e) => {  console.log(e.response); });
-		
+			"_id": "" + recordID,
+			"name": "" + recordName,
+			"address": "" + recordAdress
+		})
+		.then(res => { let result5 = res.data; console.log(result5); })
+	console.log(i);
+
 }
 
-function RemoveRecordsFromTeamDesk() {	
-		axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
-		+authtoken
-		+"/Account/delete.json?match=_id&key="
-		+recordID)
+function RemoveRecordsFromTeamDesk() {
+	axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
+		+ authtoken
+		+ "/Account/delete.json?match=_id&key="
+		+ recordID)
 
-		.then( res => {let result5 = res.data;console.log(result5);})
-		console.log("Removed Record At Id " + i)
-	}
+		.then(res => { let result5 = res.data; console.log(result5); })
+	console.log("Removed Record At Id " + i)
+}
 
 myFunction();
