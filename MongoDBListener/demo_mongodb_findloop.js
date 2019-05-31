@@ -1,26 +1,43 @@
+
+var axios = require('axios');
+
+
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
+var authtoken = "D2726E2C4E584B93876110EDD0279FF8";
+
 
 var errorMessage = "Message 2";
 
 //Used to send error emails 
 var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'mongodblistenererror@gmail.com',
-    pass: '1Password!'
-  }
+	service: 'gmail',
+	auth: {
+		user: 'mongodblistenererror@gmail.com',
+		pass: '1Password!'
+	}
 });
 
 
-var timerCheck = 10000;
+
+var loopCount = 0;
+
+var SingleRecord = "TestRecord";
+var recordID = "Test";
+var recordName = "Test";
+var recordAdress = "Test";
+
+
+var timerCheck = 60000;
 
 var databaseinfo = [];
 var addedRecordCount;
 var maxRecords;
-var changeRecords = [];
+changedRecordsRowNumber = [];
+var changedRecords = [];
 var addedRecords = [];
+var deletedRecords = [];
 
 var d;
 var hour = "23";
@@ -61,119 +78,182 @@ function myFunction() {
 
 		MongoClient.connect(url, function (err, db) {
 			if (err) {
-			errorMessage = "" + err;
-			sendErrorEmail();
+				errorMessage = "" + err;
+				sendErrorEmail();
 			}
-			
+
 			var dbo = db.db("mydb");
 			dbo.collection("customers").find({}).toArray(function (err, result) {
 				if (err) {
 					errorMessage = "" + err;
 					sendErrorEmail();
 				}
-				
+
 				if (JSON.stringify(result) == "[]") {
 					errorMessage = "No Database Found";
 					sendErrorEmail();
 					console.log('\x1b[41m', 'Error');
 					console.log("\x1b[0m", "No Database Info Found");
-					}
+				}
 				else {
 					if (JSON.stringify(databaseinfo) == JSON.stringify(result)) {
 						console.log("No Change")
 					}
+
 					if (JSON.stringify(databaseinfo) != JSON.stringify(result)) {
+
 						maxRecords = Math.max(result.length, databaseinfo.length)
 						console.log(maxRecords);
+
 						for (i = 0; i < maxRecords; i++) {
+
 							if (JSON.stringify(databaseinfo[i]) == JSON.stringify(result[i])) {
 								console.log("Record " + i + " Are The Same")
 							}
-							else if (JSON.stringify(databaseinfo[i]) != JSON.stringify(result[i])) {
+							else if (JSON.stringify(databaseinfo[i]) != JSON.stringify(result[i])) 
+							{
 								console.log("Record " + i + " Are Not The Same")
-								changeRecords.push(i);
 
-								addedRecords.push(result[i]);
+								if (JSON.stringify(databaseinfo[i]) == undefined) {
+									console.log("The Record Was Added");
+									addedRecords.push(result[i]);
+
+									console.log(result[i]);
+									SingleRecord = JSON.stringify(result[i]);
+								
+									AddRecordsToTeamDesk();;
+
+								}
+								else if (JSON.stringify(result[i]) == undefined) {
+									console.log("The Record Was Removed");
+									deletedRecords.push(databaseinfo[i]);
+								}
+								else {
+									console.log("The Record Was Changed");
+									changedRecordsRowNumber.push(i);
+									changedRecords.push(result[i]);
+								}
+
 								console.log("Record Change From ")
 								console.log(databaseinfo[i]);
 								console.log("To ");
 								console.log(result[i]);
+
 							}
-						}
-						console.log("Change Rows " + changeRecords);
-						console.log("A Change Was Found ");
-						
-
-						console.log(databaseinfo.length + " Records Found In Old Version");
-						console.log(result.length + " Records Found In New Version");
-						addedRecordCount = result.length - databaseinfo.length;
-						console.log("The Difference Is ");
-						console.log(addedRecordCount);
-						console.log(" New Records");
-						console.log(addedRecords);
-
+						};
+						console.log("Changed Rows " + changedRecords);
+						console.log("Added Rows " + addedRecords);
+						console.log("Removed Rows " + deletedRecords);
 						databaseinfo = result;
-						
 						sendCompleteEmail()
 					}
+					deletedRecords = [];
+					addedRecords = [];
+					changedRecords = [];
+					changedRecordsRowNumber = []
+					loopCount = 0;
+					db.close();
 				}
-				addedRecords = [];
-				changeRecords = [];
-				db.close();
 			})
-	});
-}
-else
-{
-	console.log("Start Time Not Found ,Will Wait For " + targetTime)
-}
-setTimeout(function () {
+		})
+	}
+	else {
+		console.log("Start Time Not Found ,Will Wait For " + targetTime)
+	}
+	setTimeout(function () {
 		myFunction();
 	}, timerCheck);
-	
+
 };
-
-
-
-
-
 
 function sendErrorEmail() {
-var mailOptions = {
-  from: 'mongodblistenererror@gmail.com',
-  to: 'mongodblistenererror@gmail.com, mongodblistenererror@gmail.com',
-  subject: 'MongoDBListener Error',
-  html: errorMessage,
-};
+	var mailOptions = {
+		from: 'mongodblistenererror@gmail.com',
+		to: 'mongodblistenererror@gmail.com, mongodblistenererror@gmail.com',
+		subject: 'MongoDBListener Error',
+		html: errorMessage,
+	};
 
-transporter.sendMail(mailOptions, function(error, info){
-	console.log("Error : " + errorMessage)
-	if (error) {
-	console.log(error);
-	} else {
-	console.log('Email sent: ' + info.response);
-	console.log("An Email Has Been Sent Regarding The Error");
-	}
-});
+	transporter.sendMail(mailOptions, function (error, info) {
+		console.log("Error : " + errorMessage)
+		if (error) {
+			console.log(error);
+		} else {
+			console.log('Email sent: ' + info.response);
+			console.log("An Email Has Been Sent Regarding The Error");
+		}
+	});
 }
 
 function sendCompleteEmail() {
-var mailOptions2 = {
-  from: 'mongodblistenererror@gmail.com',
-  to: 'mongodblistenererror@gmail.com, mongodblistenererror@gmail.com',
-  subject: 'MongoDBListener Found New Info To Add',
-  html: JSON.stringify(addedRecords),
-};
+	var mailOptions2 = {
+		from: 'mongodblistenererror@gmail.com',
+		to: 'mongodblistenererror@gmail.com, mongodblistenererror@gmail.com',
+		subject: 'MongoDBListener Found Changes',
+		html: "Add" + JSON.stringify(addedRecords) + "Changed Row Number" + JSON.stringify(changedRecordsRowNumber) + "Changed" + JSON.stringify(changedRecords) + "Removed" + JSON.stringify(deletedRecords),
+	};
 
-transporter.sendMail(mailOptions2, function(error, info){
-	if (error) {
-	console.log(error);
-	} else {
-	console.log('Email sent: ' + info.response);
-	console.log("An Email Has Been Sent Regarding The DB Changes");
-	}
-});
+	transporter.sendMail(mailOptions2, function (error, info) {
+		if (error) {
+			console.log(error);
+		} else {
+			console.log('Email sent: ' + info.response);
+			console.log("An Email Has Been Sent Regarding The DB Changes");
+		}
+	});
 }
+
+function RemoveRecords() {
+	//DELETE
+	for (i = 0; i < maxRecords; i++) {
+		axios.get("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "Account/delete.json?id=" + i)
+		console.log("Removed Record At Id" + i)
+	}
+}
+
+
+function AddRecordsToTeamDesk() {
+
+	console.log("ID");
+	console.log(SingleRecord);
+
+	SingleRecord = SingleRecord.replace("{", "");
+	SingleRecord = SingleRecord.replace("}", "");
+
+	console.log(SingleRecord);
+	SingleRecord = SingleRecord.replace(/"/g, "");
+	console.log(SingleRecord);
+
+	var words = SingleRecord.split(',');
+	console.log(words[0]);
+
+	var wordsID = words[0].split(':')
+	console.log(wordsID);
+	recordID = wordsID[1];
+
+	var wordsName = words[1].split(':')
+	console.log(wordsName);
+	recordName = wordsName[1];
+
+	var wordsAdress = words[2].split(':')
+	console.log(wordsAdress);
+	recordAdress = wordsAdress[1];
+
+	axios.post("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "/Account/create.json",
+		{
+			//"@row.id": 9,
+			"Id": "" + recordID,
+			"Record Owner": "Jim Button <balloonjimballoon@gmail.com>",
+
+			"_id": "" + recordID,
+			"name": "" + recordName,
+			"address": "" + recordAdress
+		})
+		.then(res => { let result5 = res.data; console.log(result5); })
+	console.log(i);
+	//.catch((e) => { console.log(e.response); });	
+}
+
 
 
 myFunction();
