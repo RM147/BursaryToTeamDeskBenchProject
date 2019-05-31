@@ -110,28 +110,49 @@ function myFunction() {
 							if (JSON.stringify(databaseinfo[i]) == JSON.stringify(result[i])) {
 								console.log("Record " + i + " Are The Same")
 							}
-							else if (JSON.stringify(databaseinfo[i]) != JSON.stringify(result[i])) 
-							{
+							else if (JSON.stringify(databaseinfo[i]) != JSON.stringify(result[i])) {
 								console.log("Record " + i + " Are Not The Same")
 
+								console.log(result[i]);
+								SingleRecord = JSON.stringify(result[i]);
+								console.log("ID");
+								console.log(SingleRecord);
+								SingleRecord = SingleRecord.replace("{", "");
+								SingleRecord = SingleRecord.replace("}", "");
+								console.log(SingleRecord);
+								SingleRecord = SingleRecord.replace(/"/g, "");
+								console.log(SingleRecord);
+								var words = SingleRecord.split(',');
+								console.log(words[0]);
+								var wordsID = words[0].split(':')
+								console.log(wordsID);
+								recordID = wordsID[1];
+								var wordsName = words[1].split(':')
+								console.log(wordsName);
+								recordName = wordsName[1];
+								var wordsAdress = words[2].split(':')
+								console.log(wordsAdress);
+								recordAdress = wordsAdress[1];
+
+
 								if (JSON.stringify(databaseinfo[i]) == undefined) {
+
 									console.log("The Record Was Added");
 									addedRecords.push(result[i]);
-
-									console.log(result[i]);
-									SingleRecord = JSON.stringify(result[i]);
-								
-									AddRecordsToTeamDesk();;
+									AddRecordsToTeamDesk();
 
 								}
 								else if (JSON.stringify(result[i]) == undefined) {
+
 									console.log("The Record Was Removed");
 									deletedRecords.push(databaseinfo[i]);
+									RemoveRecordsFromTeamDesk();
 								}
 								else {
 									console.log("The Record Was Changed");
 									changedRecordsRowNumber.push(i);
 									changedRecords.push(result[i]);
+									UpdateRecordsToTeamDesk();
 								}
 
 								console.log("Record Change From ")
@@ -203,41 +224,7 @@ function sendCompleteEmail() {
 	});
 }
 
-function RemoveRecords() {
-	//DELETE
-	for (i = 0; i < maxRecords; i++) {
-		axios.get("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "Account/delete.json?id=" + i)
-		console.log("Removed Record At Id" + i)
-	}
-}
-
-
 function AddRecordsToTeamDesk() {
-
-	console.log("ID");
-	console.log(SingleRecord);
-
-	SingleRecord = SingleRecord.replace("{", "");
-	SingleRecord = SingleRecord.replace("}", "");
-
-	console.log(SingleRecord);
-	SingleRecord = SingleRecord.replace(/"/g, "");
-	console.log(SingleRecord);
-
-	var words = SingleRecord.split(',');
-	console.log(words[0]);
-
-	var wordsID = words[0].split(':')
-	console.log(wordsID);
-	recordID = wordsID[1];
-
-	var wordsName = words[1].split(':')
-	console.log(wordsName);
-	recordName = wordsName[1];
-
-	var wordsAdress = words[2].split(':')
-	console.log(wordsAdress);
-	recordAdress = wordsAdress[1];
 
 	axios.post("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "/Account/create.json",
 		{
@@ -251,9 +238,31 @@ function AddRecordsToTeamDesk() {
 		})
 		.then(res => { let result5 = res.data; console.log(result5); })
 	console.log(i);
-	//.catch((e) => { console.log(e.response); });	
 }
 
+function UpdateRecordsToTeamDesk() {
+		axios.post("https://www.teamdesk.net/secure/api/v2/66139/"
+		+authtoken
+		+"/Account/update.json",
+		{
+			"Id": recordID,
+			"Record Owner": "Jim Button <balloonjimballoon@gmail.com>",
+			"_id": recordID,
+			"name": recordName,
+		  }
+		).then( res => {let result5 = res.data;console.log(result5);})
+			.catch( (e) => {  console.log(e.response); });
+		
+}
 
+function RemoveRecordsFromTeamDesk() {	
+		axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
+		+authtoken
+		+"/Account/delete.json?match=_id&key="
+		+recordID)
+
+		.then( res => {let result5 = res.data;console.log(result5);})
+		console.log("Removed Record At Id " + i)
+	}
 
 myFunction();

@@ -13,17 +13,17 @@ for (i = 95; i < maxRecords; i++)
 {	
 	console.log("https://www.teamdesk.net/secure/api/v2/66139/"
 	+authtoken
-	+"Account/delete.json?id="
-	+"453dda424")
+	+"/Account/delete.json?match=_id&key="
+	+"5cf03ea50aee023188ed0fd6")
 	
 	axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
 	+authtoken
-	+"Account/delete.json?id="
-	+"453dda424")
+	+"/Account/delete.json?match=_id&key="
+	+"5cf03ea50aee023188ed0fd6")
   
   
 	.then( res => {let result5 = res.data;console.log(result5);})
-	.catch( (e) => {  console.log(e.response); });
+	//.catch( (e) => {  console.log(e.response); });
 	console.log("Removed Record At Id " + i)
 }
 }
