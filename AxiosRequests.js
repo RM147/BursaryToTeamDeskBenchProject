@@ -39,5 +39,5 @@ axios.post("https://www.teamdesk.net/secure/api/v2/66139/"
 
   axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
   +authtoken
-  +"Account/delete.json?id="
+  +"/Account/delete.json?id="
   +"12") //number has to be @row_id not sure how you would deal with that on the Mongo side.
