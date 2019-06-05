@@ -4,8 +4,9 @@
 
 This features uses cryptoJS to encrpyt information being entered through the scripts into the mongo database. Then decrypt information that sends to the API TeamDesk. 
 
-# 1 . Install Node
-# 2 . in the \MongoDBListener folder open up your command console and run npm install
+1 . Install Node
+
+2 . in the \MongoDBListener folder open up your command console and run npm install
 
 # How to use CryptoJS
 
