@@ -10,7 +10,6 @@ var transporter = nodemailer.createTransport({
 
 var timerCheck = 1000;
 
-
 function myFunction()
 {
 var mailOptions = {
@@ -19,7 +18,6 @@ var mailOptions = {
   subject: 'Sending Email using Node.js',
   text: ':)'
 }
-
 
 transporter.sendMail(mailOptions, function(error, info){
   if (error) {
@@ -30,8 +28,6 @@ transporter.sendMail(mailOptions, function(error, info){
 });
 
 setTimeout(function () {
-		myFunction();
 	}, timerCheck);
-	}
-
-myFunction();
+  }
+  module.exports = myFunction;

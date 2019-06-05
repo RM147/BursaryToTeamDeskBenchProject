@@ -51,7 +51,6 @@ describe("MongoDBlistener Logic Adding Record To Blank DB", function () {
   })
 })
 
-
 function CheckingDifference() {
   if (newdata == "[]") {
     console.log("no data found");

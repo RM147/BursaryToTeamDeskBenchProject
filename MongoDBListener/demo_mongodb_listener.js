@@ -1,3 +1,5 @@
+
+
 var axios = require('axios');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
@@ -15,7 +17,6 @@ var transporter = nodemailer.createTransport({
 		pass: '1Password!'
 	}
 });
-
 
 
 var loopCount = 0;
@@ -115,34 +116,34 @@ function myFunction() {
 
 								if (JSON.stringify(databaseinfo[i]) == undefined) {
 
-								console.log(result[i]);
-								SingleRecord = JSON.stringify(result[i]);
-								console.log("ID");
-								console.log(SingleRecord);
-								SingleRecord = SingleRecord.replace("{", "");
-								SingleRecord = SingleRecord.replace("}", "");
-								console.log(SingleRecord);
-								SingleRecord = SingleRecord.replace(/"/g, "");
-								console.log(SingleRecord);
-								var words = SingleRecord.split(',');
-								console.log(words[0]);
-								var wordsID = words[0].split(':')
-								console.log(wordsID);
-								recordID = wordsID[1];
-								var wordsName = words[1].split(':')
-								console.log(wordsName);
-								recordName = wordsName[1];
-								var wordsAdress = words[2].split(':')
-								console.log(wordsAdress);
-								recordAdress = wordsAdress[1];
-								
+									console.log(result[i]);
+									SingleRecord = JSON.stringify(result[i]);
+									console.log("ID");
+									console.log(SingleRecord);
+									SingleRecord = SingleRecord.replace("{", "");
+									SingleRecord = SingleRecord.replace("}", "");
+									console.log(SingleRecord);
+									SingleRecord = SingleRecord.replace(/"/g, "");
+									console.log(SingleRecord);
+									var words = SingleRecord.split(',');
+									console.log(words[0]);
+									var wordsID = words[0].split(':')
+									console.log(wordsID);
+									recordID = wordsID[1];
+									var wordsName = words[1].split(':')
+									console.log(wordsName);
+									recordName = wordsName[1];
+									var wordsAdress = words[2].split(':')
+									console.log(wordsAdress);
+									recordAdress = wordsAdress[1];
+
 									console.log("The Record Was Added");
 									addedRecords.push(result[i]);
 									AddRecordsToTeamDesk();
 
 								}
 								else if (JSON.stringify(result[i]) == undefined) {
-									
+
 									PriorSingleRecord = JSON.stringify(databaseinfo[i]);
 									console.log("OLD RECORD");
 									console.log(PriorSingleRecord);
@@ -152,11 +153,11 @@ function myFunction() {
 									PriorSingleRecord = PriorSingleRecord.replace(/"/g, "");
 									console.log(PriorSingleRecord);
 									var Priorwords = PriorSingleRecord.split(',');
-									console.log(Priorwords [0]);
+									console.log(Priorwords[0]);
 									var priorwordsID = Priorwords[0].split(':')
 									console.log(priorwordsID);
 									priorRecordID = priorwordsID[1];
-									
+
 									console.log("The Record Was Removed");
 									deletedRecords.push(databaseinfo[i]);
 									RemoveRecordsFromTeamDesk();
@@ -164,27 +165,27 @@ function myFunction() {
 								else {
 
 									console.log(result[i]);
-								SingleRecord = JSON.stringify(result[i]);
-								console.log("ID");
-								console.log(SingleRecord);
-								SingleRecord = SingleRecord.replace("{", "");
-								SingleRecord = SingleRecord.replace("}", "");
-								console.log(SingleRecord);
-								SingleRecord = SingleRecord.replace(/"/g, "");
-								console.log(SingleRecord);
-								var words = SingleRecord.split(',');
-								console.log(words[0]);
-								var wordsID = words[0].split(':')
-								console.log(wordsID);
-								recordID = wordsID[1];
-								var wordsName = words[1].split(':')
-								console.log(wordsName);
-								recordName = wordsName[1];
-								var wordsAdress = words[2].split(':')
-								console.log(wordsAdress);
-								recordAdress = wordsAdress[1];
-								
-								
+									SingleRecord = JSON.stringify(result[i]);
+									console.log("ID");
+									console.log(SingleRecord);
+									SingleRecord = SingleRecord.replace("{", "");
+									SingleRecord = SingleRecord.replace("}", "");
+									console.log(SingleRecord);
+									SingleRecord = SingleRecord.replace(/"/g, "");
+									console.log(SingleRecord);
+									var words = SingleRecord.split(',');
+									console.log(words[0]);
+									var wordsID = words[0].split(':')
+									console.log(wordsID);
+									recordID = wordsID[1];
+									var wordsName = words[1].split(':')
+									console.log(wordsName);
+									recordName = wordsName[1];
+									var wordsAdress = words[2].split(':')
+									console.log(wordsAdress);
+									recordAdress = wordsAdress[1];
+
+
 									PriorSingleRecord = JSON.stringify(databaseinfo[i]);
 									console.log("OLD RECORD");
 									console.log(PriorSingleRecord);
@@ -194,7 +195,7 @@ function myFunction() {
 									PriorSingleRecord = PriorSingleRecord.replace(/"/g, "");
 									console.log(PriorSingleRecord);
 									var Priorwords = PriorSingleRecord.split(',');
-									console.log(Priorwords [0]);
+									console.log(Priorwords[0]);
 									var priorwordsID = Priorwords[0].split(':')
 									console.log(priorwordsID);
 									priorRecordID = priorwordsID[1];
@@ -292,14 +293,14 @@ function AddRecordsToTeamDesk() {
 }
 
 function UpdateRecordsToTeamDesk() {
-	
+
 	axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
 		+ authtoken
 		+ "/Account/delete.json?match=_id&key="
 		+ priorRecordID)
 		.then(res => { let result5 = res.data; console.log(result5); })
 	console.log("Removed Record At Id " + i)
-	
+
 	axios.post("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "/Account/create.json",
 		{
 			"Id": "" + recordID,

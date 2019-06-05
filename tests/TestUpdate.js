@@ -9,7 +9,6 @@ describe("Updating Test", function () {
     MongoClient.connect(url, function (err, db) {
       if (err) throw err;
       var dbo = db.db("mydb");
-      
       dbo.collection("customers").drop(function(err, delOK) {
         if (err) {
           assert.equal(true, false);
