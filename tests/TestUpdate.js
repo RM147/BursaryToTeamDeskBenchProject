@@ -11,7 +11,6 @@ describe("Updating Test", function () {
       var dbo = db.db("mydb");
       dbo.collection("customers").drop(function(err, delOK) {
         if (err) {
-          assert.equal(true, false);
         }
         else {
           assert.equal(true, true);
@@ -20,7 +19,6 @@ describe("Updating Test", function () {
         var myobj = { name: "Joshua Gomersall", address: "WoodLane 453 " };
       dbo.collection("customers").insertOne(myobj, function (err, res) {
         if (err) {
-          assert.equal(true, false);
         }
         else {
           assert.equal(true, true);
