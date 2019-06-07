@@ -12,4 +12,6 @@ MongoClient.connect(url, function(err, db) {
   });
 });
 }
+
+remove();
 module.exports = remove;

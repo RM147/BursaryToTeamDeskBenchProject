@@ -5,7 +5,6 @@ var recordID = "Test";
 var recordName = "Test";
 var recordAdress = "Test";
 
-
 function AddRecordsToTeamDesk() {
 	axios.post("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "/Account/create.json",
 		{
@@ -15,7 +14,7 @@ function AddRecordsToTeamDesk() {
 			"name": "" + recordName,
 			"address": "" + recordAdress
 		})
-		.then(res => { let result5 = res.data; console.log(result5); })
+		.then(res => { let result5 = res.data; console.log(result5); result5 = res.status ; console.log(result5);})
 }
 
-AddRecordsToTeamDesk();
+module.exports = AddRecordsToTeamDesk;

@@ -1,5 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
+let message;
+
 
 function add(){
 MongoClient.connect(url, function(err, db) {
@@ -11,14 +13,14 @@ MongoClient.connect(url, function(err, db) {
   dbo.collection("customers").insertOne(myobj, function(err, res) {
     if (err) throw err;
     console.log("1 document inserted");
-    db.close();
   });
-  
   dbo.collection("customers").insertOne(myobj2, function(err, res) {
     if (err) throw err;
-    console.log("1 document inserted");
+    console.log("2 document inserted");
+    message = "Test";
     db.close();
   });
 });
+return message;
 }
 module.exports = add;

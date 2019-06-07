@@ -10,6 +10,8 @@ MongoClient.connect(url, function(err, db) {
     if (err) throw err;
     console.log("1 document inserted");
     db.close();
+    let message = "1 document inserted";
+    return "T";
   });
 });
 }

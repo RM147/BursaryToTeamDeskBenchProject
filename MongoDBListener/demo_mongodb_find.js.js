@@ -12,4 +12,7 @@ MongoClient.connect(url, function(err, db) {
   });
 });
 }
+
+find();
+
 module.exports = find;

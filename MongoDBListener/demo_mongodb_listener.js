@@ -4,7 +4,7 @@ var axios = require('axios');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 var authtoken = "D2726E2C4E584B93876110EDD0279FF8";
-
+var CryptoJS = require("crypto-js");
 
 var errorMessage = "Message 2";
 
@@ -18,7 +18,7 @@ var transporter = nodemailer.createTransport({
 	}
 });
 
-
+var addcount = 0;
 var loopCount = 0;
 
 var PriorSingleRecord = "PriorTestTest";
@@ -29,7 +29,7 @@ var recordName = "Test";
 var recordAdress = "Test";
 
 
-var timerCheck = 10000;
+var timerCheck = 20000;
 
 var databaseinfo = [];
 var addedRecordCount;
@@ -106,6 +106,7 @@ function myFunction() {
 						console.log(maxRecords);
 
 						for (i = 0; i < maxRecords; i++) {
+								console.log("Done");
 
 							if (JSON.stringify(databaseinfo[i]) == JSON.stringify(result[i])) {
 								console.log("Record " + i + " Are The Same")
@@ -208,18 +209,16 @@ function myFunction() {
 									changedRecordsRowNumber.push(i);
 									changedRecords.push(result[i]);
 									UpdateRecordsToTeamDesk();
-
 								}
-
 								console.log("Record Change From ")
 								console.log(databaseinfo[i]);
 								console.log("To ");
 								console.log(result[i]);
 							}
 						};
-						console.log("Changed Rows " + changedRecords);
-						console.log("Added Rows " + addedRecords);
-						console.log("Removed Rows " + deletedRecords);
+						console.log("Changed Rows " + changedRecords.length);
+						console.log("Added Rows " + addedRecords.length);
+						console.log("Removed Rows " + deletedRecords.length);
 						sendCompleteEmail()
 					}
 					deletedRecords = [];
@@ -237,9 +236,9 @@ function myFunction() {
 		console.log("Start Time Not Found ,Will Wait For " + targetTime)
 	}
 	setTimeout(function () {
+		addcount = 0;
 		myFunction();
 	}, timerCheck);
-
 };
 
 function sendErrorEmail() {
@@ -280,20 +279,31 @@ function sendCompleteEmail() {
 }
 
 function AddRecordsToTeamDesk() {
+		
 	axios.post("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "/Account/create.json",
 		{
 			"Id": "" + recordID,
 			"Record Owner": "Jim Button <balloonjimballoon@gmail.com>",
 			"_id": "" + recordID,
-			"name": "" + recordName,
-			"address": "" + recordAdress
+			"name": "" + CryptoJS.AES.decrypt(recordName, '9ZQsIE2mLQ5a').toString(CryptoJS.enc.Utf8),
+			"address": "" + CryptoJS.AES.decrypt(recordAdress, '9ZQsIE2mLQ5a').toString(CryptoJS.enc.Utf8),
 		})
 		.then(res => { let result5 = res.data; console.log(result5); })
+		.catch(function (error) { console.log(error.response.status); let errorResult = error.response.status 
+			if (errorResult == 429)
+		{
+			AddRecordsToTeamDesk();
+		}})		
+	
 	console.log(i);
+	addcount++;
+	console.log("add count " + addcount);
+
+
+
 }
 
 function UpdateRecordsToTeamDesk() {
-
 	axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
 		+ authtoken
 		+ "/Account/delete.json?match=_id&key="
@@ -306,8 +316,8 @@ function UpdateRecordsToTeamDesk() {
 			"Id": "" + recordID,
 			"Record Owner": "Jim Button <balloonjimballoon@gmail.com>",
 			"_id": "" + recordID,
-			"name": "" + recordName,
-			"address": "" + recordAdress
+			"name": "" + CryptoJS.AES.decrypt(recordName, '9ZQsIE2mLQ5a').toString(CryptoJS.enc.Utf8),
+			"address": "" + CryptoJS.AES.decrypt(recordAdress, '9ZQsIE2mLQ5a').toString(CryptoJS.enc.Utf8),
 		})
 		.then(res => { let result5 = res.data; console.log(result5); })
 	console.log(i);

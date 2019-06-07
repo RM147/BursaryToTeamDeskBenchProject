@@ -1,6 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 
+
 function add(){
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
@@ -23,8 +24,10 @@ MongoClient.connect(url, function(err, db) {
   ];
   dbo.collection("customers").insertMany(myobj, function(err, res) {
     if (err) throw err;
+    insertCounter = "Number of documents inserted: " + res.insertedCount;
     console.log("Number of documents inserted: " + res.insertedCount);
     db.close();
+    return insertCounter;
   });
 });
 }
