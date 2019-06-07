@@ -289,17 +289,11 @@ function AddRecordsToTeamDesk() {
 			"address": "" + CryptoJS.AES.decrypt(recordAdress, '9ZQsIE2mLQ5a').toString(CryptoJS.enc.Utf8),
 		})
 		.then(res => { let result5 = res.data; console.log(result5); })
-		.catch(function (error) { console.log(error.response.status); let errorResult = error.response.status 
-			if (errorResult == 429)
-		{
-			AddRecordsToTeamDesk();
-		}})		
+		.catch(function (error) { console.log(error.response.status); let errorResult = error.response.status 		
 	
 	console.log(i);
 	addcount++;
 	console.log("add count " + addcount);
-
-
 
 }
 
