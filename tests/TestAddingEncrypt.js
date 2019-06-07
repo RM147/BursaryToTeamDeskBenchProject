@@ -7,7 +7,7 @@ var url = "mongodb://localhost:27017/";
 
 describe("Adding One Encryption Test", function () {
   it("checks if a single item can be added to MongoDB after Encryption", function () {
-    add();
+    assert.notEqual(add()),"_id : Default , Name : Aberdeen Inc, Adress : Queen Cross 69";
   });
 });
 

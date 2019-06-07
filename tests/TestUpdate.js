@@ -13,7 +13,6 @@ describe("Updating Test", function () {
         if (err) {
         }
         else {
-          assert.equal(true, true);
           console.log("Old Documents Removed");
         }
         var myobj = { name: "Joshua Gomersall", address: "WoodLane 453 " };
@@ -21,7 +20,6 @@ describe("Updating Test", function () {
         if (err) {
         }
         else {
-          assert.equal(true, true);
           console.log("1 document inserted");
           db.close();
         }

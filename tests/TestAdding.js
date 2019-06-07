@@ -5,25 +5,49 @@ const add3 = require("../MongoDBListener/demo_mongodb_insert_multiple.js");
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 
-describe("Adding One Test", function () {
-  it("checks if a single item can be added to MongoDB", function () {
-    console.log("Test")
-    add();
-  });
-});
+const timeAllowance = 10000;
 
-describe("Adding 2 Test", function () {
-  it("checks if two items can be added to MongoDB", function () {
-    console.log("Test")
-    add2();
-  });
-});
+describe("Adding One Test", () => {
+  it("checks if a single item can be added to MongoDB Within Time Limit", (done) => {
+    const adding = () => Promise.resolve(add());
+    adding()
+    .then((result) =>
+    {
+      console.log(result);
+      done();
+      console.log(result);
+      assert.equal(result,"T");
+  })
+})
+}).timeout(timeAllowance);
 
-describe("Adding Test", function () {
-  it("checks if multiple items can be added to MongoDB", function () {
-    console.log("Test")
-    add3();
-  });
-});
 
+describe("Adding Two Test", () => {
+  it("checks if two items can be added to MongoDB Within Time Limit", (done) => {
+    const adding = () => Promise.resolve(add2());
+    adding()
+    .then((result) =>
+    {
+      console.log(result);
+      done();
+      console.log(result);
+      assert.equal(result,"T");
+  })
+})
+}).timeout(timeAllowance);
+
+
+describe("Adding Multiple Test", () => {
+  it("checks if a s item can be added to MongoDB Within Time Limit", (done) => {
+    const adding = () => Promise.resolve(add3());
+    adding()
+    .then((result) =>
+    {
+      console.log(result);
+      done();
+      console.log(result);
+      assert.equal(result,"T");
+  })
+})
+}).timeout(timeAllowance);
 
