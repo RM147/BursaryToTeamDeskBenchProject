@@ -1,8 +1,14 @@
+
+const AddRecordsToTeamDesk2 = require("../MongoDBListener/demo_add_teamdesk.js");
+const RemoveRecordsFromTeamDesk2 = require("../MongoDBListener/demo_remove_teamdesk.js");
+
+
 var axios = require('axios');
+
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 var authtoken = "D2726E2C4E584B93876110EDD0279FF8";
-
+var CryptoJS = require("crypto-js");
 
 var errorMessage = "Message 2";
 
@@ -16,8 +22,7 @@ var transporter = nodemailer.createTransport({
 	}
 });
 
-
-
+var addcount = 0;
 var loopCount = 0;
 
 var PriorSingleRecord = "PriorTestTest";
@@ -28,7 +33,7 @@ var recordName = "Test";
 var recordAdress = "Test";
 
 
-var timerCheck = 10000;
+var timerCheck = 20000;
 
 var databaseinfo = [];
 var addedRecordCount;
@@ -104,6 +109,7 @@ function myFunction() {
 						maxRecords = Math.max(result.length, databaseinfo.length)
 						console.log(maxRecords);
 
+
 						for (i = 0; i < maxRecords; i++) {
 
 							if (JSON.stringify(databaseinfo[i]) == JSON.stringify(result[i])) {
@@ -115,110 +121,75 @@ function myFunction() {
 
 								if (JSON.stringify(databaseinfo[i]) == undefined) {
 
-								console.log(result[i]);
-								SingleRecord = JSON.stringify(result[i]);
-								console.log("ID");
-								console.log(SingleRecord);
-								SingleRecord = SingleRecord.replace("{", "");
-								SingleRecord = SingleRecord.replace("}", "");
-								console.log(SingleRecord);
-								SingleRecord = SingleRecord.replace(/"/g, "");
-								console.log(SingleRecord);
-								var words = SingleRecord.split(',');
-								console.log(words[0]);
-								var wordsID = words[0].split(':')
-								console.log(wordsID);
-								recordID = wordsID[1];
-								var wordsName = words[1].split(':')
-								console.log(wordsName);
-								recordName = wordsName[1];
-								var wordsAdress = words[2].split(':')
-								console.log(wordsAdress);
-								recordAdress = wordsAdress[1];
-								
+									SingleRecord = JSON.stringify(result[i]);
+									SingleRecord = SingleRecord.replace("{", "");
+									SingleRecord = SingleRecord.replace("}", "");
+									SingleRecord = SingleRecord.replace(/"/g, "");
+									var words = SingleRecord.split(',');
+									var wordsID = words[0].split(':')
+									recordID = wordsID[1];
+									var wordsName = words[1].split(':')
+									recordName = wordsName[1];
+									var wordsAdress = words[2].split(':')
+									recordAdress = wordsAdress[1];
+
 									console.log("The Record Was Added");
 									addedRecords.push(result[i]);
 									AddRecordsToTeamDesk();
 
 								}
 								else if (JSON.stringify(result[i]) == undefined) {
-									
+
 									PriorSingleRecord = JSON.stringify(databaseinfo[i]);
-									console.log("OLD RECORD");
-									console.log(PriorSingleRecord);
 									PriorSingleRecord = PriorSingleRecord.replace("{", "");
 									PriorSingleRecord = PriorSingleRecord.replace("}", "");
-									console.log(PriorSingleRecord);
 									PriorSingleRecord = PriorSingleRecord.replace(/"/g, "");
-									console.log(PriorSingleRecord);
 									var Priorwords = PriorSingleRecord.split(',');
-									console.log(Priorwords [0]);
 									var priorwordsID = Priorwords[0].split(':')
-									console.log(priorwordsID);
 									priorRecordID = priorwordsID[1];
-									
+
 									console.log("The Record Was Removed");
 									deletedRecords.push(databaseinfo[i]);
 									RemoveRecordsFromTeamDesk();
 								}
 								else {
 
-									console.log(result[i]);
-								SingleRecord = JSON.stringify(result[i]);
-								console.log("ID");
-								console.log(SingleRecord);
-								SingleRecord = SingleRecord.replace("{", "");
-								SingleRecord = SingleRecord.replace("}", "");
-								console.log(SingleRecord);
-								SingleRecord = SingleRecord.replace(/"/g, "");
-								console.log(SingleRecord);
-								var words = SingleRecord.split(',');
-								console.log(words[0]);
-								var wordsID = words[0].split(':')
-								console.log(wordsID);
-								recordID = wordsID[1];
-								var wordsName = words[1].split(':')
-								console.log(wordsName);
-								recordName = wordsName[1];
-								var wordsAdress = words[2].split(':')
-								console.log(wordsAdress);
-								recordAdress = wordsAdress[1];
-								
-								
+									SingleRecord = JSON.stringify(result[i]);
+									SingleRecord = SingleRecord.replace("{", "");
+									SingleRecord = SingleRecord.replace("}", "");
+									SingleRecord = SingleRecord.replace(/"/g, "");
+									var words = SingleRecord.split(',');
+									var wordsID = words[0].split(':')
+									recordID = wordsID[1];
+									var wordsName = words[1].split(':')
+									recordName = wordsName[1];
+									var wordsAdress = words[2].split(':')
+									recordAdress = wordsAdress[1];
+
+
 									PriorSingleRecord = JSON.stringify(databaseinfo[i]);
-									console.log("OLD RECORD");
-									console.log(PriorSingleRecord);
 									PriorSingleRecord = PriorSingleRecord.replace("{", "");
 									PriorSingleRecord = PriorSingleRecord.replace("}", "");
-									console.log(PriorSingleRecord);
 									PriorSingleRecord = PriorSingleRecord.replace(/"/g, "");
-									console.log(PriorSingleRecord);
 									var Priorwords = PriorSingleRecord.split(',');
-									console.log(Priorwords [0]);
 									var priorwordsID = Priorwords[0].split(':')
-									console.log(priorwordsID);
 									priorRecordID = priorwordsID[1];
 
-									console.log("OLD ID");
-									console.log(priorwordsID);
-									console.log("New ID");
-									console.log(wordsID);
-									console.log("The Record Was Changed");
 									changedRecordsRowNumber.push(i);
 									changedRecords.push(result[i]);
 									UpdateRecordsToTeamDesk();
-
 								}
-
 								console.log("Record Change From ")
 								console.log(databaseinfo[i]);
 								console.log("To ");
 								console.log(result[i]);
 							}
+
 						};
-						console.log("Changed Rows " + changedRecords);
-						console.log("Added Rows " + addedRecords);
-						console.log("Removed Rows " + deletedRecords);
+
+						console.log("Changed Rows " + changedRecords.length);
+						console.log("Added Rows " + addedRecords.length);
+						console.log("Removed Rows " + deletedRecords.length);
 						sendCompleteEmail()
 					}
 					deletedRecords = [];
@@ -236,9 +207,9 @@ function myFunction() {
 		console.log("Start Time Not Found ,Will Wait For " + targetTime)
 	}
 	setTimeout(function () {
+		addcount = 0;
 		myFunction();
 	}, timerCheck);
-
 };
 
 function sendErrorEmail() {
@@ -279,46 +250,18 @@ function sendCompleteEmail() {
 }
 
 function AddRecordsToTeamDesk() {
-	axios.post("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "/Account/create.json",
-		{
-			"Id": "" + recordID,
-			"Record Owner": "Jim Button <balloonjimballoon@gmail.com>",
-			"_id": "" + recordID,
-			"name": "" + recordName,
-			"address": "" + recordAdress
-		})
-		.then(res => { let result5 = res.data; console.log(result5); })
-	console.log(i);
+	AddRecordsToTeamDesk2(recordID , recordName , recordAdress);
 }
 
+
 function UpdateRecordsToTeamDesk() {
-	
-	axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
-		+ authtoken
-		+ "/Account/delete.json?match=_id&key="
-		+ priorRecordID)
-		.then(res => { let result5 = res.data; console.log(result5); })
-	console.log("Removed Record At Id " + i)
-	
-	axios.post("https://www.teamdesk.net/secure/api/v2/66139/" + authtoken + "/Account/create.json",
-		{
-			"Id": "" + recordID,
-			"Record Owner": "Jim Button <balloonjimballoon@gmail.com>",
-			"_id": "" + recordID,
-			"name": "" + recordName,
-			"address": "" + recordAdress
-		})
-		.then(res => { let result5 = res.data; console.log(result5); })
-	console.log(i);
+	RemoveRecordsFromTeamDesk2(priorRecordID);
+
+	AddRecordsToTeamDesk2(recordID , recordName , recordAdress);
 }
 
 function RemoveRecordsFromTeamDesk() {
-	axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
-		+ authtoken
-		+ "/Account/delete.json?match=_id&key="
-		+ priorRecordID)
-		.then(res => { let result5 = res.data; console.log(result5); })
-	console.log("Removed Record At Id " + i)
+	RemoveRecordsFromTeamDesk2(priorRecordID);
 }
 
 myFunction();

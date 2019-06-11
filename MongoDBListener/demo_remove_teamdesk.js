@@ -1,31 +1,21 @@
 var axios = require('axios');
-
 var authtoken = "D2726E2C4E584B93876110EDD0279FF8";
 
-var maxRecords = 96;
 
-function RemoveRecords() {
-//DELETE
-
-
-
-for (i = 95; i < maxRecords; i++)
-{	
-	console.log("https://www.teamdesk.net/secure/api/v2/66139/"
-	+authtoken
-	+"/Account/delete.json?match=_id&key="
-	+"5cf03ea50aee023188ed0fd6")
-	
-	axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
-	+authtoken
-	+"/Account/delete.json?match=_id&key="
-	+"5cf03ea50aee023188ed0fd6")
-  
-  
-	.then( res => {let result5 = res.data;console.log(result5);})
-	//.catch( (e) => {  console.log(e.response); });
-	console.log("Removed Record At Id " + i)
-}
+function RemoveRecords (priorRecordID) {
+axios.get("https://www.teamdesk.net/secure/api/v2/66139/"
+		+ authtoken
+		+ "/Account/delete.json?match=_id&key="
+		+ priorRecordID)
+		.then(res => { let result5 = res.data; console.log(result5); })
+		.catch(function (error) {let errorResult = error.response.status; //console.log(error.response.status);
+		if (errorResult == "429") {
+			console.log("FAIL");
+			RemoveRecords(priorRecordID);
+		}
+		else {
+			console.log("WOOOP");
+		}})
 }
 
-RemoveRecords();
+module.exports = RemoveRecords;
