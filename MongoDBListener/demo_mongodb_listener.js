@@ -1,10 +1,10 @@
-
+const validator = require("../MongoDBListener/demo_mongodb_valid.js");
 const AddRecordsToTeamDesk2 = require("../MongoDBListener/demo_add_teamdesk.js");
 const RemoveRecordsFromTeamDesk2 = require("../MongoDBListener/demo_remove_teamdesk.js");
 
+let Salt = "9ZQsIE2mLQ5a";
 
 var axios = require('axios');
-
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 var authtoken = "D2726E2C4E584B93876110EDD0279FF8";
@@ -32,8 +32,24 @@ var recordID = "Test";
 var recordName = "Test";
 var recordAdress = "Test";
 
+let firstName;
+let surname;
+let gender;
+let university;
+let degree;
+let startDate;
+let enddate;
+let intake;
+let tech;
+let email;
+let emailbusiness;
+let mobile;
+let geoflex;
+let security;
+let statusinfo;
 
-var timerCheck = 20000;
+
+var timerCheck = 5000;
 
 var databaseinfo = [];
 var addedRecordCount;
@@ -118,20 +134,87 @@ function myFunction() {
 							else if (JSON.stringify(databaseinfo[i]) != JSON.stringify(result[i])) {
 								console.log("Record " + i + " Are Not The Same")
 
+								SingleRecord = JSON.stringify(result[i]);
+								recordID = JSON.stringify(result[i]._id);
+								console.log(recordID);
+
+								firstName = JSON.stringify(result[i].firstName);
+								firstName = firstName.replace('"', "")
+								firstName = CryptoJS.AES.decrypt(firstName, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("first name : " + firstName);
+
+								surname = JSON.stringify(result[i].surName);
+								surname = surname.replace('"',"");
+								surname = CryptoJS.AES.decrypt(surname, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("surname" + surname);
+
+								gender = JSON.stringify(result[i].gender);
+								gender = gender.replace('"',"");
+								gender = CryptoJS.AES.decrypt(gender, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("gender" + gender);
+
+								university = JSON.stringify(result[i].university);
+								university = university.replace('"',"");
+								university = CryptoJS.AES.decrypt(university, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("uni " + university);
+
+								degree = JSON.stringify(result[i].degree);
+								degree = degree.replace('"',"");
+								degree = CryptoJS.AES.decrypt(degree, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("degree " + degree);
+
+								startDate = JSON.stringify(result[i].startDate);
+								console.log(startDate);
+								startDate = startDate.replace('"',"");
+								startDate = CryptoJS.AES.decrypt(startDate, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("start " + startDate);
+
+								enddate = JSON.stringify(result[i].endDate);
+								enddate = enddate.replace('"',"");
+								enddate = CryptoJS.AES.decrypt(enddate, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("end " + enddate);
+
+								intake = JSON.stringify(result[i].intake);
+								intake = intake.replace('"',"");
+								intake = CryptoJS.AES.decrypt(intake, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("intake " + intake);
+
+								tech = JSON.stringify(result[i].tech);
+								tech = tech.replace('"',"");
+								tech = CryptoJS.AES.decrypt(tech, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("tech " + tech);
+
+								email = JSON.stringify(result[i].email);
+								email = email.replace('"',"");
+								email =	CryptoJS.AES.decrypt(email, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("email " + email);
+								
+								emailbusiness = JSON.stringify(result[i].emailbusiness);
+								emailbusiness = emailbusiness.replace('"',"");
+								emailbusiness = CryptoJS.AES.decrypt(emailbusiness, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("buisness email " + emailbusiness);
+								
+								mobile = JSON.stringify(result[i].mobile);
+								mobile = mobile.replace('"',"");
+								mobile = CryptoJS.AES.decrypt(mobile, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("phone " + mobile);
+								
+								geoflex = JSON.stringify(result[i].geoflex);
+								geoflex = geoflex.replace('"',"");
+								geoflex = CryptoJS.AES.decrypt(geoflex, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("geo-flex " + geoflex);
+								
+								security = JSON.stringify(result[i].securityClearance);
+								security = security.replace('"',"");
+								security = CryptoJS.AES.decrypt(security, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("security " + security);
+								
+								statusinfo = JSON.stringify(result[i].statusinfo);
+								statusinfo = statusinfo.replace('"',"");
+								statusinfo = CryptoJS.AES.decrypt(statusinfo, Salt).toString(CryptoJS.enc.Utf8);
+								console.log("status " + statusinfo);
 
 								if (JSON.stringify(databaseinfo[i]) == undefined) {
-
-									SingleRecord = JSON.stringify(result[i]);
-									SingleRecord = SingleRecord.replace("{", "");
-									SingleRecord = SingleRecord.replace("}", "");
-									SingleRecord = SingleRecord.replace(/"/g, "");
-									var words = SingleRecord.split(',');
-									var wordsID = words[0].split(':')
-									recordID = wordsID[1];
-									var wordsName = words[1].split(':')
-									recordName = wordsName[1];
-									var wordsAdress = words[2].split(':')
-									recordAdress = wordsAdress[1];
 
 									console.log("The Record Was Added");
 									addedRecords.push(result[i]);
@@ -153,19 +236,6 @@ function myFunction() {
 									RemoveRecordsFromTeamDesk();
 								}
 								else {
-
-									SingleRecord = JSON.stringify(result[i]);
-									SingleRecord = SingleRecord.replace("{", "");
-									SingleRecord = SingleRecord.replace("}", "");
-									SingleRecord = SingleRecord.replace(/"/g, "");
-									var words = SingleRecord.split(',');
-									var wordsID = words[0].split(':')
-									recordID = wordsID[1];
-									var wordsName = words[1].split(':')
-									recordName = wordsName[1];
-									var wordsAdress = words[2].split(':')
-									recordAdress = wordsAdress[1];
-
 
 									PriorSingleRecord = JSON.stringify(databaseinfo[i]);
 									PriorSingleRecord = PriorSingleRecord.replace("{", "");
@@ -249,15 +319,50 @@ function sendCompleteEmail() {
 	});
 }
 
+
 function AddRecordsToTeamDesk() {
-	AddRecordsToTeamDesk2(recordID , recordName , recordAdress);
+
+	let validatorList = (validator(firstName ,surname ,gender, tech, emailbusiness, email, geoflex, security));
+	
+	console.log(validatorList);
+	
+	firstName = validatorList[0];
+	surname = validatorList[1];
+	gender = validatorList[2];
+	tech = validatorList[3];
+	emailbusiness = validatorList[4];
+	email = validatorList[5];
+	geoflex = validatorList[6];
+	security = validatorList[7];
+
+	console.log("NOW ADDING")
+	
+
+console.log(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo);
+
+	AddRecordsToTeamDesk2(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo);
 }
 
 
 function UpdateRecordsToTeamDesk() {
 	RemoveRecordsFromTeamDesk2(priorRecordID);
 
-	AddRecordsToTeamDesk2(recordID , recordName , recordAdress);
+
+	let validatorList = (validator(firstName ,surname ,gender, tech, emailbusiness, email, geoflex, security));
+	
+	console.log(validatorList);
+
+	firstName = validatorList[0];
+	surname = validatorList[1];
+	gender = validatorList[2];
+	tech = validatorList[3];
+	emailbusiness = validatorList[4];
+	email = validatorList[5];
+	geoflex = validatorList[6];
+	security = validatorList[7];
+
+	console.log("NOW ADDING")
+	AddRecordsToTeamDesk2(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo);
 }
 
 function RemoveRecordsFromTeamDesk() {
