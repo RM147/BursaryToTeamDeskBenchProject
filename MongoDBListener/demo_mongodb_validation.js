@@ -5,7 +5,6 @@ const emailRegex = /@\w*\.com/;
 const QAEmail = /@qa.com/;
 const traineeEmail = /@academytrainee.com/;
 
-
 var validTest = {
     "firstName": "Name",
     "surname": "Name",
@@ -21,7 +20,6 @@ var validTest = {
     "geoFlex": "Yes",
     "securityClearance": "SC",
     "employmentStatus": "Bench - Academy"
-
 };
 
 var invalidTest = {
@@ -35,7 +33,7 @@ var invalidTest = {
     "technology": "Js",
     "businessEmail": "rana@email.com",
     "personalEmail": "rana@email.com",
-    "mobile": "07710123456",
+    "mobile":"07710123456",
     "geoFlex": "Maybe",
     "securityClearance": "BPSDGG",
     "employmentStatus": "Bench - Academy"
@@ -62,6 +60,7 @@ function validator(entry) {
     emailValidate(entry);
     console.log(invalidCount(entry));
     console.log(changeLog(entry));
+
     //for testing purposes
 }
 
@@ -96,12 +95,11 @@ function changeLog(entry) {
         }
     })
     if (log !== "") {
-        return log.substring(0,log.length-4)+"were changed.";
+        return log.substring(0, log.length - 4) + "were changed.";
     } else {
         return log;
     }
 
 }
-
 
 module.exports = validate;
