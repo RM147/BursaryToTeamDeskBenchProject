@@ -45,9 +45,8 @@ var invalidTest = {
 validator(validTest);
 validator(invalidTest);
 
-
 function validator(entry) {
-    
+
     if (entry.gender !== "Male" && entry.gender !== "Female") {
         entry.gender = "Invalid";
     }
@@ -61,7 +60,8 @@ function validator(entry) {
         entry.technology = "Invalid";
     }
     emailValidate(entry);
-    console.log(entry);
+    console.log(invalidCount(entry));
+    console.log(changeLog(entry));
     //for testing purposes
 }
 
@@ -74,8 +74,33 @@ function emailValidate(entry) {
     }
 }
 
-function invalidCount(entry){
-    
+function invalidCount(entry) {
+    let count = 0;
+    Object.keys(entry).forEach(function (key) {
+        if (entry[key] === "Invalid") {
+            count++;
+        }
+    })
+    if (count > 0) {
+        return count + " changes made.";
+    } else {
+        return "";
+    }
+}
+
+function changeLog(entry) {
+    let log = "";
+    Object.keys(entry).forEach(function (key) {
+        if (entry[key] === "Invalid") {
+            log += key + " and ";
+        }
+    })
+    if (log !== "") {
+        return log.substring(0,log.length-4)+"were changed.";
+    } else {
+        return log;
+    }
+
 }
 
 
