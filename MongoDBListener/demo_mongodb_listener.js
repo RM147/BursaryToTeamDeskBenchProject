@@ -345,6 +345,9 @@ console.log(recordID, firstName, surname, gender, university, degree, startDate,
 
 
 function UpdateRecordsToTeamDesk() {
+
+	console.log(priorRecordID);
+
 	RemoveRecordsFromTeamDesk2(priorRecordID);
 
 
@@ -366,6 +369,7 @@ function UpdateRecordsToTeamDesk() {
 }
 
 function RemoveRecordsFromTeamDesk() {
+	
 	RemoveRecordsFromTeamDesk2(priorRecordID);
 }
 
