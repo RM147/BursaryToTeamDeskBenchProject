@@ -6,8 +6,6 @@ const QAEmail = /@qa.com/;
 const traineeEmail = /@academytrainee.com/;
 var CryptoJS = require("crypto-js");
 
-let Salt = "9ZQsIE2mLQ5a";
-
 var logMessage;
 
 //emails
@@ -67,30 +65,44 @@ function validator(firstName , surname,  gender, tech, emailbusiness , email , g
 
     if (changeCount == "0" || changeCount < 1) {
         "No issues found";
+		sendEmailValid(firstName , surname);
     }
     else {
-        sendEmail(firstName , surname);
+        sendEmailError(firstName , surname);
     }
-
 
     let validResult = []
 
     validResult.push(firstName , surname,  gender, tech, emailbusiness, email, geoflex, security);
-
-    
-    
     
     return validResult;
     //for testing purposes
 }
 
 
-function sendEmail(firstName , surname) {
+function sendEmailError(firstName , surname) {
     var mailOptions = {
         from: 'mongodblistenererror@gmail.com',
         to: 'mongodblistenererror@gmail.com',
         subject: 'Validation Warning With Account ' + firstName + " " + surname ,
         html: logMessage,
+    }
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
+function sendEmailValid(firstName , surname) {
+    var mailOptions = {
+        from: 'mongodblistenererror@gmail.com',
+        to: 'mongodblistenererror@gmail.com',
+        subject: 'Validation On Account ' + firstName + " " + surname + " Has Been Completed",
+        html: "The trainee " + firstName + " " + surname + " has been Validated ",
     }
 
     transporter.sendMail(mailOptions, function (error, info) {

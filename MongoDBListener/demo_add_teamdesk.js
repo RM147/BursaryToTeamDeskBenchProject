@@ -5,7 +5,6 @@ AddRecordsToTeamDesk('4' ,"John" , "Smith" , "Male" , "Uni" , "Degreez" , "2019-
 							  
 function AddRecordsToTeamDesk(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo) {
 
-	
 	recordID = recordID.replace('"',"");
 	recordID = recordID.replace('"',"");
 	recordID = recordID.replace('"',"");

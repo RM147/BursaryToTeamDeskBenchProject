@@ -2,9 +2,9 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://34.245.236.104:27017";
 var CryptoJS = require("crypto-js");
 
-let SingleRecord;
 
  function find (){
+
 	MongoClient.connect(url, function(err, db) {
 		if (err) throw err;
 		var dbo = db.db("trainees");
