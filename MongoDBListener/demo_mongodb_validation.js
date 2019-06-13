@@ -33,7 +33,7 @@ var invalidTest = {
     "technology": "Js",
     "businessEmail": "rana@email.com",
     "personalEmail": "rana@email.com",
-    "mobile":"07710123456",
+    "mobile": "07710123456",
     "geoFlex": "Maybe",
     "securityClearance": "BPSDGG",
     "employmentStatus": "Bench - Academy"
@@ -54,14 +54,13 @@ function validator(entry) {
     if (!validSecurity.includes(entry.securityClearance)) {
         entry.securityClearance = "Invalid";
     }
-    if (!validTech.includes(entry.technology)) {
-        entry.technology = "Invalid";
-    }
+    // if (!validTech.includes(entry.technology)) {
+    //     entry.technology = "Invalid";
+    // } Currently list of valid technologies is undecided so tech validation is disabled until a concrete list is decided.
+    //Uncomment when list is decided.
     emailValidate(entry);
     console.log(invalidCount(entry));
     console.log(changeLog(entry));
-
-    //for testing purposes
 }
 
 function emailValidate(entry) {
