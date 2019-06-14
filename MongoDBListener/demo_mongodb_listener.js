@@ -49,7 +49,7 @@ let security;
 let statusinfo;
 
 
-var timerCheck = 5000;
+var timerCheck = 15000;
 
 var databaseinfo = [];
 var addedRecordCount;
@@ -219,18 +219,33 @@ function myFunction() {
 									statusinfo = CryptoJS.AES.decrypt(statusinfo, Salt).toString(CryptoJS.enc.Utf8);
 									//console.log("status " + statusinfo);
 
+									addedRecords.push(result[i]);
+
+									console.log(statusinfo);
+
+									if (statusinfo == "Trainee") {
+										console.log("This user was added as a Trainee");
+									}
+									else if (statusinfo == "Bench") {
+										console.log("This user was added on the Bench");
+										console.log("This user is still Trainee");
+									}
+									else if (statusinfo == "Consultant") {
+										console.log("This user was added as a Consultant");
+									}
+
 									console.log("The Record Was Added");
 									AddRecordsToTeamDesk();
 								}
 								else if (JSON.stringify(result[i]) == undefined && JSON.stringify(databaseinfo[i]) != undefined) {
 									console.log("The Record Was Removed");
 
-
 									//console.log("ID");
 									console.log(databaseinfo[i]._id);
 									priorRecordID = JSON.stringify(databaseinfo[i]._id);
 
 									RemoveRecordsFromTeamDesk();
+									deletedRecords.push("The User " + CryptoJS.AES.decrypt(databaseinfo[i].firstName, Salt).toString(CryptoJS.enc.Utf8) + CryptoJS.AES.decrypt(databaseinfo[i].surName, Salt).toString(CryptoJS.enc.Utf8)  + " Was Removed <br></br>");
 								}
 								else {
 									console.log("The Record Was Updated");
@@ -314,11 +329,28 @@ function myFunction() {
 									statusinfo = CryptoJS.AES.decrypt(statusinfo, Salt).toString(CryptoJS.enc.Utf8);
 									//console.log("status " + statusinfo);
 
+									console.log(statusinfo);
+
+									if (statusinfo == "Trainee") {
+										console.log("This user is a Trainee");
+									}
+									else if (statusinfo == "Bench") {
+										console.log("This user is on the Bench");
+										console.log("This user is a Trainee");
+									}
+									else if (statusinfo == "Consultant" && databaseinfo[i].statusinfo != "Consultant") {
+										console.log("This user was update to a Consultant");
+									}
+
 									console.log("ID");
 									console.log(databaseinfo[i]._id);
 									priorRecordID = JSON.stringify(databaseinfo[i]._id);
 
+
+									changedRecords.push(result[i]);
+
 									UpdateRecordsToTeamDesk();
+
 								}
 								console.log("Record Change From ")
 								console.log(databaseinfo[i]);
@@ -327,18 +359,11 @@ function myFunction() {
 
 							}
 
-							console.log("CURRENT STORED DB");
-							console.log(databaseinfo);
-							console.log("CURRENT RESULT DB");
-							console.log(result);
-
 						};
-
 						console.log("Changed Rows " + changedRecords.length);
 						console.log("Added Rows " + addedRecords.length);
 						console.log("Removed Rows " + deletedRecords.length);
 						sendCompleteEmail();
-
 					}
 					deletedRecords = [];
 					addedRecords = [];
@@ -388,7 +413,7 @@ function sendCompleteEmail() {
 		from: 'mongodblistenererror@gmail.com',
 		to: 'mongodblistenererror@gmail.com, mongodblistenererror@gmail.com',
 		subject: 'MongoDBListener Found Changes',
-		html: "Add" + JSON.stringify(addedRecords) + "Changed Row Number" + JSON.stringify(changedRecordsRowNumber) + "Changed" + JSON.stringify(changedRecords) + "Removed" + JSON.stringify(deletedRecords),
+		html: "Added : " + JSON.stringify(addedRecords.length) + "<br><br/> Changed : " + JSON.stringify(changedRecords.length) + "<br><br/> Removed : " + JSON.stringify(deletedRecords.length) + "<br><br/>" + JSON.stringify(deletedRecords),
 	};
 
 	transporter.sendMail(mailOptions2, function (error, info) {

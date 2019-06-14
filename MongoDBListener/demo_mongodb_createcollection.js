@@ -13,4 +13,7 @@ MongoClient.connect(url, function(err, db) {
   });
 });
 }
+
+makecollection();
+
 module.exports = makecollection;

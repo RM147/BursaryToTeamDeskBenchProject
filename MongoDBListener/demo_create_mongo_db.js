@@ -9,4 +9,7 @@ MongoClient.connect(url, function(err, db) {
   db.close();
 });
 }
+
+make();
+
 module.exports = make;
