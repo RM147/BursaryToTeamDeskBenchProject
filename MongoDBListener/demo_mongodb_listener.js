@@ -4,6 +4,10 @@ const RemoveRecordsFromTeamDesk2 = require("../MongoDBListener/demo_remove_teamd
 
 let Salt = "9ZQsIE2mLQ5a";
 
+let allStatusCodes = "";
+let allLogMessages = "";
+
+
 var axios = require('axios');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
@@ -132,7 +136,6 @@ function myFunction() {
 								console.log("Record " + i + " Are The Same")
 
 								console.log(databaseinfo[i]);
-
 							}
 							else if (JSON.stringify(databaseinfo[i]) != JSON.stringify(result[i])) {
 								console.log("Record " + i + " Are Not The Same")
@@ -360,9 +363,9 @@ function myFunction() {
 							}
 
 						};
-						console.log("Changed Rows " + changedRecords.length);
-						console.log("Added Rows " + addedRecords.length);
-						console.log("Removed Rows " + deletedRecords.length);
+						// console.log("Changed Rows " + changedRecords.length);
+						// console.log("Added Rows " + addedRecords.length);
+						// console.log("Removed Rows " + deletedRecords.length);
 						sendCompleteEmail();
 					}
 					deletedRecords = [];
@@ -371,10 +374,6 @@ function myFunction() {
 					changedRecordsRowNumber = []
 					loopCount = 0;
 					databaseinfo = result;
-					console.log("CURRENT STORED DB");
-					console.log(databaseinfo);
-					console.log("CURRENT RESULT DB");
-					console.log(result);
 					db.close();
 				}
 			})
@@ -388,6 +387,96 @@ function myFunction() {
 		myFunction();
 	}, timerCheck);
 };
+
+function AddRecordsToTeamDesk() {
+
+	let validatorList = (validator(firstName, surname, gender, tech, emailbusiness, email, geoflex, security));
+
+	//console.log(validatorList);
+
+	firstName = validatorList[0];
+	surname = validatorList[1];
+	gender = validatorList[2];
+	tech = validatorList[3];
+	emailbusiness = validatorList[4];
+	email = validatorList[5];
+	geoflex = validatorList[6];
+	security = validatorList[7];
+	allLogMessages = allLogMessages + validatorList[8];
+
+	console.log(allLogMessages);
+
+	console.log("Result" + AddRecordsToTeamDesk2(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo));
+	//console.log("T" + allStatusCodes);
+}
+
+
+function UpdateRecordsToTeamDesk() {
+	RemoveRecordsFromTeamDesk2(priorRecordID);
+
+	let validatorList = (validator(firstName, surname, gender, tech, emailbusiness, email, geoflex, security));
+
+	firstName = validatorList[0];
+	surname = validatorList[1];
+	gender = validatorList[2];
+	tech = validatorList[3];
+	emailbusiness = validatorList[4];
+	email = validatorList[5];
+	geoflex = validatorList[6];
+	security = validatorList[7];
+	allLogMessages = allLogMessages + validatorList[8];
+
+	allStatusCodes = allStatusCodes + AddRecordsToTeamDesk2(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo);
+}
+
+function RemoveRecordsFromTeamDesk() {
+	RemoveRecordsFromTeamDesk2(priorRecordID);
+}
+
+myFunction();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function sendErrorEmail() {
 	var mailOptions = {
@@ -413,7 +502,13 @@ function sendCompleteEmail() {
 		from: 'mongodblistenererror@gmail.com',
 		to: 'mongodblistenererror@gmail.com, mongodblistenererror@gmail.com',
 		subject: 'MongoDBListener Found Changes',
-		html: "Added : " + JSON.stringify(addedRecords.length) + "<br><br/> Changed : " + JSON.stringify(changedRecords.length) + "<br><br/> Removed : " + JSON.stringify(deletedRecords.length) + "<br><br/>" + JSON.stringify(deletedRecords),
+		html: "<h1>Simple OverView</h1>"
+		+ "Added : " + JSON.stringify(addedRecords.length) 
+		+ "<br/> Changed : " + JSON.stringify(changedRecords.length) 
+		+ "<br/> Removed : " + JSON.stringify(deletedRecords.length) 
+		+ "<br/>" + JSON.stringify(deletedRecords)
+		+ "<br><br/> <h1>Validation Messages</h1>" + allLogMessages 
+		+ "<br><br/> <h1>Status Codes</h1>" + allStatusCodes
 	};
 
 	transporter.sendMail(mailOptions2, function (error, info) {
@@ -425,52 +520,3 @@ function sendCompleteEmail() {
 		}
 	});
 }
-
-
-function AddRecordsToTeamDesk() {
-
-	let validatorList = (validator(firstName, surname, gender, tech, emailbusiness, email, geoflex, security));
-
-	//console.log(validatorList);
-
-	firstName = validatorList[0];
-	surname = validatorList[1];
-	gender = validatorList[2];
-	tech = validatorList[3];
-	emailbusiness = validatorList[4];
-	email = validatorList[5];
-	geoflex = validatorList[6];
-	security = validatorList[7];
-
-	console.log("NOW ADDING")
-
-
-	console.log(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo);
-
-	AddRecordsToTeamDesk2(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo);
-}
-
-
-function UpdateRecordsToTeamDesk() {
-	RemoveRecordsFromTeamDesk2(priorRecordID);
-
-
-	let validatorList = (validator(firstName, surname, gender, tech, emailbusiness, email, geoflex, security));
-
-	firstName = validatorList[0];
-	surname = validatorList[1];
-	gender = validatorList[2];
-	tech = validatorList[3];
-	emailbusiness = validatorList[4];
-	email = validatorList[5];
-	geoflex = validatorList[6];
-	security = validatorList[7];
-
-	AddRecordsToTeamDesk2(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo);
-}
-
-function RemoveRecordsFromTeamDesk() {
-	RemoveRecordsFromTeamDesk2(priorRecordID);
-}
-
-myFunction();

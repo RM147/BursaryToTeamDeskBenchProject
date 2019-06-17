@@ -41,11 +41,11 @@ function validator(firstName , surname,  gender, tech, emailbusiness , email , g
         security = "Invalid";
         changeCount++;
     }
-    if (!validTech.includes(tech)) {
-        changeLog = changeLog + "We are unable to add the Technoligy as the value " + tech + " is an invalid option. This has been defaulted to invalid <br></br>";
-        tech = "Invalid";
-        changeCount++;
-    }
+    // if (!validTech.includes(tech)) {
+    //     changeLog = changeLog + "We are unable to add the Technoligy as the value " + tech + " is an invalid option. This has been defaulted to invalid <br></br>";
+    //     tech = "Invalid";
+    //     changeCount++;
+    // }
 
     if (!emailRegex.test(email)) {
         changeLog = changeLog + "We are unable to add the email as the value " + email + " is an invalid email adress. This has been defaulted to invalid <br></br>";
@@ -60,20 +60,20 @@ function validator(firstName , surname,  gender, tech, emailbusiness , email , g
 
     //console.log(changeCount);
     //console.log(changeLog);
-    logMessage = "Changed Records : " + changeCount + "<br></br> " + "We are unable to add the following information for " + firstName + " " + surname + "<br></br>" + changeLog + "<br></br>";
+    logMessage = "Changed Records : " + changeCount + "<br></br> " + "We are unable to add the following information for " + email + " " + firstName + " " + surname + "<br></br>" + changeLog + "<br></br>";
     //console.log(logMessage);
 
     if (changeCount == "0" || changeCount < 1) {
         "No issues found";
-		sendEmailValid(firstName , surname);
+        logMessage = "The User " + firstName + " " + surname + " Using Email " + email +" has been Validated With No Issues </br>";
     }
     else {
-        sendEmailError(firstName , surname);
+        logMessage = "Changed Records : " + changeCount + "<br></br> " + "We are unable to add the following information for " + firstName + " " + surname + "<br></br>"  + " Using Email " + email + "  " + changeLog + "<br></br>";
     }
 
     let validResult = []
 
-    validResult.push(firstName , surname,  gender, tech, emailbusiness, email, geoflex, security);
+    validResult.push(firstName , surname,  gender, tech, emailbusiness, email, geoflex, security ,logMessage);
     
     return validResult;
     //for testing purposes
