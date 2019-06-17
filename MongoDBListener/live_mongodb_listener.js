@@ -261,9 +261,11 @@ function myFunction() {
 									//console.log("ID");
 									console.log(databaseinfo[i]._id);
 									priorRecordID = JSON.stringify(databaseinfo[i]._id);
+									
+								
+									deletedRecords.push("The User " + CryptoJS.AES.decrypt(databaseinfo[i].firstName, Salt).toString(CryptoJS.enc.Utf8) + CryptoJS.AES.decrypt(databaseinfo[i].surName, Salt).toString(CryptoJS.enc.Utf8)  + " Was Removed <br></br>");
 
 									RemoveRecordsFromTeamDesk();
-									deletedRecords.push("The User " + CryptoJS.AES.decrypt(databaseinfo[i].firstName, Salt).toString(CryptoJS.enc.Utf8) + CryptoJS.AES.decrypt(databaseinfo[i].surName, Salt).toString(CryptoJS.enc.Utf8)  + " Was Removed <br></br>");
 								}
 								else {
 									console.log("The Record Was Updated");
