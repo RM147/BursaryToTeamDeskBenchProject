@@ -1,10 +1,9 @@
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://34.245.236.104:27017";
+var url = "mongodb://63.35.236.7:27017";
 var CryptoJS = require("crypto-js");
 const AddRecordsToTeamDesk2 = require("../MongoDBListener/demo_add_teamdesk.js");
 
 function find() {
-
 	MongoClient.connect(url, function (err, db) {
 		if (err) throw err;
 		var dbo = db.db("trainees");

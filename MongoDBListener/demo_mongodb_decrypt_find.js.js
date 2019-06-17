@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
-var url = "34.245.236.104";
+var url = "mongodb://63.35.236.7:27017";
 var CryptoJS = require("crypto-js");
 
  function find (){
