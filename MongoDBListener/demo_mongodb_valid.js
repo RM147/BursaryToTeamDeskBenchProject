@@ -68,7 +68,7 @@ function validator(firstName , surname,  gender, tech, emailbusiness , email , g
         logMessage = "The User " + firstName + " " + surname + " Using Email " + email +" has been Validated With No Issues </br>";
     }
     else {
-        logMessage = "Changed Records : " + changeCount + "<br></br> " + "We are unable to add the following information for " + firstName + " " + surname + "<br></br>"  + " Using Email " + email + "  " + changeLog + "<br></br>";
+        logMessage = "Changed Records : " + changeCount + "<br></br> " + "We are unable to add the following information for " + firstName + " " + surname + " Using Email " + email + "<br></br>" + changeLog + "<br></br>";
     }
 
     let validResult = []

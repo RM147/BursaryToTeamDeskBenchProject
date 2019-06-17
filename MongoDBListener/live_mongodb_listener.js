@@ -53,7 +53,7 @@ let security;
 let statusinfo;
 
 
-var timerCheck = 15000;
+var timerCheck = 30000;
 
 var databaseinfo = [];
 var addedRecordCount;
@@ -71,25 +71,25 @@ var displayMinuites = "59";
 var targetTime = "23:59";
 
 //Set Base For Database
-MongoClient.connect(url, function (err, db) {
-	if (err) {
-		errorMessage = "" + err;
-		sendErrorEmail();
-		console.log('\x1b[41m', 'Error');
-		console.log("\x1b[0m", "No Database Info Found");
-	}
-	var dbo = db.db("trainees");
-	dbo.collection("trainees").find({}, { projection: { trainee_password: 0, trainee_account_no: 0, trainee_bank_name: 0, trainee_sort_code: 0, bursary: 0, bursary_amount: 0 ,monthly_expenses:0,  trainee_password_expires: 0 ,  bank_holiday: 0,
-		trainee_password_token: 0, trainee_days_worked:0 ,trainee_bench_start_date: 0 , trainee_bench_end_date: 0 , added_By : 0 , __v: 0}}).toArray(function (err, result) {
-		databaseinfo = result;
-		db.close();
-	});
-});
+// MongoClient.connect(url, function (err, db) {
+// 	if (err) {
+// 		errorMessage = "" + err;
+// 		sendErrorEmail();
+// 		console.log('\x1b[41m', 'Error');
+// 		console.log("\x1b[0m", "No Database Info Found");
+// 	}
+// 	var dbo = db.db("trainees");
+// 	dbo.collection("trainees").find({}, { projection: { trainee_password: 0, trainee_account_no: 0, trainee_bank_name: 0, trainee_sort_code: 0, bursary: 0, bursary_amount: 0 ,monthly_expenses:0,  trainee_password_expires: 0 ,  bank_holiday: 0,
+// 		trainee_password_token: 0, trainee_days_worked:0 ,trainee_bench_start_date: 0 , trainee_bench_end_date: 0 , added_By : 0 , __v: 0}}).toArray(function (err, result) {
+// 		databaseinfo = result;
+// 		db.close();
+// 	});
+// });
 
 function myFunction() {
 	// d = new Date();
 	// hour = d.getHours();
-	// minuites = d.getMinutes();
+	//minuites = d.getMinutes();
 	if (minuites < 10) {
 		displayMinuites = "0" + minuites;
 	}
@@ -426,8 +426,6 @@ function AddRecordsToTeamDesk() {
 	geoflex = validatorList[6];
 	security = validatorList[7];
 	allLogMessages = allLogMessages + validatorList[8];
-
-	console.log(allLogMessages);
 
 	console.log("Result" + AddRecordsToTeamDesk2(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo));
 	//console.log("T" + allStatusCodes);
