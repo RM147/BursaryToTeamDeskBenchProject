@@ -30,6 +30,7 @@ axios.get("https://www.teamdesk.net/secure/api/v2/66383/C48C1FFD63B045BE83E44D5C
 		else {
 			console.log("WOOOP");
 		}})
+		console.log("IT IS REMOVED NOW ")
 }
 
 module.exports = RemoveRecords;

@@ -137,8 +137,6 @@ function myFunction() {
 
 							if (JSON.stringify(databaseinfo[i]) == JSON.stringify(result[i])) {
 								console.log("Record " + i + " Are The Same")
-
-								console.log(databaseinfo[i]);
 							}
 							else if (JSON.stringify(databaseinfo[i]) != JSON.stringify(result[i])) {
 								console.log("Record " + i + " Are Not The Same")
@@ -262,10 +260,10 @@ function myFunction() {
 									console.log(databaseinfo[i]._id);
 									priorRecordID = JSON.stringify(databaseinfo[i]._id);
 									
-								
-									deletedRecords.push("The User " + CryptoJS.AES.decrypt(databaseinfo[i].firstName, Salt).toString(CryptoJS.enc.Utf8) + CryptoJS.AES.decrypt(databaseinfo[i].surName, Salt).toString(CryptoJS.enc.Utf8)  + " Was Removed <br></br>");
+									deletedRecords.push("The User " + CryptoJS.AES.decrypt(databaseinfo[i].trainee_fname, Salt).toString(CryptoJS.enc.Utf8) + CryptoJS.AES.decrypt(databaseinfo[i].trainee_lname, Salt).toString(CryptoJS.enc.Utf8)  + " Was Removed <br></br>");
 
 									RemoveRecordsFromTeamDesk();
+
 								}
 								else {
 									console.log("The Record Was Updated");
