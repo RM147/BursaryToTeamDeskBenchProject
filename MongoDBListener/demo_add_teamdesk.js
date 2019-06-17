@@ -33,7 +33,7 @@ function AddRecordsToTeamDesk(recordID, firstName, surname, gender, university, 
 		.then(res => { let result5 = "User : " + firstName + " " + surname + ", Id : " + recordID +  ", Status : " + res.data[0].status + "<br></br>"; console.log(result5); return result5 })
 		.catch(function (error) {  let errorResult = error.response.status;
 			if (errorResult == "429") {
-				AddRecordsToTeamDesk(recordID , recordName , recordAdress);
+				AddRecordsToTeamDesk(recordID, firstName, surname, gender, university, degree, startDate, enddate, intake, tech, emailbusiness, email, mobile, geoflex, security, statusinfo);
 			}
 			else {
 				console.log("WOOOP");
