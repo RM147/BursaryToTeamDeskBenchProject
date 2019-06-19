@@ -2,7 +2,9 @@ const validator = require("../MongoDBListener/demo_mongodb_valid.js");
 const AddRecordsToTeamDesk2 = require("../MongoDBListener/demo_add_teamdesk.js");
 const RemoveRecordsFromTeamDesk2 = require("../MongoDBListener/demo_remove_teamdesk.js");
 
-let Salt = "3FJSei8zPx";
+const Salt = require("./Config.js").Salt;
+const url = require("./Config.js").DB_URL;
+
 
 let allStatusCodes = "";
 let allLogMessages = "";
@@ -10,8 +12,6 @@ let allLogMessages = "";
 
 var axios = require('axios');
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://63.35.236.7:27017";
-var authtoken = "D2726E2C4E584B93876110EDD0279FF8";
 var CryptoJS = require("crypto-js");
 
 var errorMessage = "Message 2";
@@ -540,4 +540,7 @@ function sendCompleteEmail() {
 			console.log("An Email Has Been Sent Regarding The DB Changes");
 		}
 	});
+
+	allLogMessages = "";
+	allStatusCodes = "";
 }

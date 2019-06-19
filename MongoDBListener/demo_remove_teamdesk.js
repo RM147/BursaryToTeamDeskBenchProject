@@ -1,10 +1,6 @@
 var axios = require('axios');
-var authtoken = "C48C1FFD63B045BE83E44D5C1062B7AB";
-
 
 function RemoveRecords (priorRecordID) {
-	
-	
 	
 	if (priorRecordID == 'PriorTest' || priorRecordID == null || priorRecordID == undefined)
 	{

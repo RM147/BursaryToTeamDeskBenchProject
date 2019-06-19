@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://34.245.236.104:27017";
+const url = require("./Config.js").DB_URL;
 
 function find (){
 MongoClient.connect(url, function(err, db) {
