@@ -1,0 +1,57 @@
+var MongoClient = require('mongodb').MongoClient;
+const url = require("./Config.js").DB_URL;
+var CryptoJS = require("crypto-js");
+
+
+ function find (){
+
+	MongoClient.connect(url, function(err, db) {
+		if (err) throw err;
+		var dbo = db.db("trainees");
+		dbo.collection("trainees").find({}).toArray(function(err, results) {
+			console.log(results);
+			console.log("Find Required Info For Team Desk")
+			results.map(result => {
+			let forename = CryptoJS.AES.decrypt(result.trainee_lname, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			let surname = CryptoJS.AES.decrypt(result.trainee_lname, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			//let gender = CryptoJS.AES.decrypt(result.gender, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			//let uni = CryptoJS.AES.decrypt(result.university, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			//let degree = CryptoJS.AES.decrypt(result.degree, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			let startDate = CryptoJS.AES.decrypt(result.trainee_start_date, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			let endDate = CryptoJS.AES.decrypt(result.trainee_end_date, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			//let intake = CryptoJS.AES.decrypt(result.intake, '3FJSei8zPx').toString(CryptoJS.enc.Utf8); 
+			//let tech = CryptoJS.AES.decrypt(result.tech, '3FJSei8zPx').toString(CryptoJS.enc.Utf8); 
+			let email = CryptoJS.AES.decrypt(result.trainee_email, CryptoJS.enc.Hex.parse("253D3FB468A0E24677C28A624BE0F939"), {iv: CryptoJS.enc.Hex.parse("00000000000000000000000000000000")}).toString(CryptoJS.enc.Utf8);
+			//let emailbusiness = CryptoJS.AES.decrypt(result.trainee_email, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			//let mobile = CryptoJS.AES.decrypt(result.mobile, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			//let geoflex = CryptoJS.AES.decrypt(result.geoflex, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			//let securityClearance = CryptoJS.AES.decrypt(result.securityClearance, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			let statusinfo = CryptoJS.AES.decrypt(result.status, '3FJSei8zPx').toString(CryptoJS.enc.Utf8);
+			  
+			  
+			  console.log(
+			  'forename : ' + forename + 
+			  ', surname : ' + surname + 
+			  //", gender : " + gender +
+			  //", uni : " + uni +
+			  //", degree : " + degree +
+			  ", startDate : " + startDate + 
+			  ", endDate : " + endDate + 
+			  //", intake : " + intake +
+			  //", tech : " + tech +
+			  //", emailbusiness : " + emailbusiness +
+			  ", email : " + email +
+			  //", mobile : " + mobile +
+			  //", geoflex : " + geoflex +
+			  //", securityClearance : " + securityClearance +
+			  ", status : " + statusinfo); 			  
+			  })
+			})
+		  if (err) throw err;
+		  db.close();
+		});
+}
+
+find();
+
+module.exports = find; 
