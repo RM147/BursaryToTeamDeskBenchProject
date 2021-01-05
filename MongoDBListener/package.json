@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "mocha": "^6.1.4",
     "mongodb": "^3.2.6",
     "nodemailer": "^6.2.1"
